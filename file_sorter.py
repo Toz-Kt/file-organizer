@@ -3,8 +3,11 @@ folder = Path("test_folder_exit")
 for file in folder.iterdir():
     print(file.suffix)
     x = file.suffix.lower()
-    if file.is_dir():
+    if x in [".crdownload", ".part", ".partial", ".opdownload", ".download",
+           ".tmp", ".brave-download", ".aria2", ".!qb", ".!ut", ".bc!"]:
         continue
+    elif file.is_dir():
+        folder_name = "folders"
     elif x in [".png", ".jpg", ".jpeg"]:
         folder_name = "images"
     elif x in [".mp4", ".avi", ".mov", ".mpeg"]:
@@ -24,8 +27,7 @@ for file in folder.iterdir():
     elif x in [".csv", ".xlsx", ".json"]:
         folder_name = "data"
     else:
-        folder_name = "ukunow"
-
+        folder_name = "unknown"
     destino = Path("enter") / folder_name
     destino.mkdir(parents=True, exist_ok=True)
     nuevo = destino / file.name 
