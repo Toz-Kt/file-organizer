@@ -1,7 +1,11 @@
 from pathlib import Path
-folder = Path("test_folder_exit")
+import time
+start = "test_folder_exit"
+final =  "test_folder_enter"
+folder = Path(start)
 for file in folder.iterdir():
-    print(file.suffix)
+    if file.is_file() and time.time() - file.stat().st_mtime < 300:
+        continue
     x = file.suffix.lower()
     if x in [".crdownload", ".part", ".partial", ".opdownload", ".download",
            ".tmp", ".brave-download", ".aria2", ".!qb", ".!ut", ".bc!"]:
@@ -16,7 +20,7 @@ for file in folder.iterdir():
         folder_name = "audio"
     elif x in [".txt", ".docx", ".pdf"]:
         folder_name = "documents"
-    elif x in [".zip", ".rar", ".tar"]:
+    elif x in [".zip", ".rar", ".tar", ".gz"]:
         folder_name = "compressed"
     elif x in [".exe", ".msi"]:
         folder_name = "executables"
@@ -28,11 +32,12 @@ for file in folder.iterdir():
         folder_name = "data"
     else:
         folder_name = "unknown"
-    destino = Path("enter") / folder_name
+    destino = Path(final) / folder_name
     destino.mkdir(parents=True, exist_ok=True)
     nuevo = destino / file.name 
     n = 1
     while nuevo.exists():
-            nuevo = destino / f"{file.stem}_{n}{file.suffix}"
-            n = n + 1
+        nuevo = destino / f"{file.stem}_{n}{file.suffix}"
+        n = n + 1
     file.rename(nuevo)
+    print(f"{file.name} -> {folder_name}")
