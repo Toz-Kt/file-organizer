@@ -39,5 +39,8 @@ for file in folder.iterdir():
     while nuevo.exists():
         nuevo = destino / f"{file.stem}_{n}{file.suffix}"
         n = n + 1
-    file.rename(nuevo)
-    print(f"{file.name} -> {folder_name}")
+    try:
+        file.rename(nuevo)
+        print(f"{file.name} -> {folder_name}")
+    except PermissionError:
+        print(f"No pude mover {file.name}, está en uso")
